@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Иконка для маркеров на карте
+// Иконка маркера
 const markerIcon = new L.Icon({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
   iconSize: [25, 41],
@@ -31,7 +31,9 @@ export default function Home() {
       const { latitude, longitude } = pos.coords;
 
       const message = `GM from ${latitude},${longitude}`;
-      const signature = await sdk.wallet.signMessage(message);
+
+      // Обход ошибки типов
+      const signature = await (sdk.wallet as any).signMessage(message);
 
       setGms((prev) => [...prev, { lat: latitude, lng: longitude, signature }]);
       console.log("GM sent:", message, signature);
